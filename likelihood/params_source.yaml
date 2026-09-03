@@ -1,0 +1,190 @@
+# Priors taken from https://arxiv.org/pdf/2601.14559 Table III (page 13)
+# WL photo-z errors
+# NOTE: DES uses the photo-z PCA approach which is different than this
+DES_DZ_S1:
+  prior:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  ref:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  proposal: 0.002
+  latex: \Delta z_\mathrm{s,LSST}^1
+DES_DZ_S2:
+  prior:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  ref:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  proposal: 0.002
+  latex: \Delta z_\mathrm{s,LSST}^2
+DES_DZ_S3:
+  prior:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  ref:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  proposal: 0.002
+  latex: \Delta z_\mathrm{s,LSST}^3
+DES_DZ_S4:
+  prior:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  ref:
+    dist: norm
+    loc: 0.0
+    scale: 0.002
+  proposal: 0.002
+  latex: \Delta z_\mathrm{s,LSST}^4
+# Intrinsic alignment
+# NOTE: DES uses a different convention of A1_DES = -A1, 5*A2_DES = A2
+DES_A1_1:
+  prior:
+    min: -1
+    max:  3
+  ref:
+    dist: norm
+    loc: 0.7
+    scale: 0.5
+  proposal: 0.5
+  latex: A_\mathrm{1-IA,LSST}^1
+DES_A1_2:
+  prior:
+    min: -3
+    max:  3
+  ref:
+    dist: norm
+    loc: -1.7
+    scale: 0.5
+  proposal: 0.5
+  latex: A_\mathrm{1-IA,LSST}^2
+DES_A1_3:
+  value: 0
+  latex: A_\mathrm{1-IA,LSST}^3
+DES_A1_4:
+  value: 0
+  latex: A_\mathrm{1-IA,LSST}^4
+DES_A2_1:
+  value: 0.0
+  #prior:
+  #  min: -5
+  #  max:  5
+  #ref:
+  #  dist: norm
+  #  loc: -1.36
+  #  scale: 0.5
+  #proposal: 0.5
+  latex: A_\mathrm{2-IA,LSST}^1
+DES_A2_2:
+  value: 0.0
+  #prior:
+  #  min: -5
+  #  max:  5
+  #ref:
+  #  dist: norm
+  #  loc: -2.5
+  #  scale: 0.5
+  #proposal: 0.5
+  latex: A_\mathrm{2-IA,LSST}^2
+DES_A2_3:
+  value: 0
+  latex: A_\mathrm{2-IA,LSST}^3
+DES_A2_4:
+  value: 0
+  latex: A_\mathrm{2-IA,LSST}^4
+
+# ------------------------------------------------------------------------
+# ------------------------------------------------------------------------
+# ------------------------------------------------------------------------
+DES_BTA_1:
+  value: 0.0
+  #prior:
+  #  min: 0
+  #  max: 2
+  #ref:
+  #  dist: norm
+  #  loc: 1
+  #  scale: 0.15
+  #proposal: 0.1
+  latex: A_\mathrm{BTA-IA,LSST}^1
+DES_BTA_2:
+  value: 0
+  latex: A_\mathrm{BTA-IA,LSST}^2
+DES_BTA_3:
+  value: 0
+  latex: A_\mathrm{BTA-IA,LSST}^3
+DES_BTA_4:
+  value: 0
+  latex: A_\mathrm{BTA-IA,LSST}^4
+# Shear calibration parameters
+# NOTE: DES also uses correlated priors on M and U_source
+DES_M1:
+  prior:
+    dist: norm
+    loc: -0.0034
+    scale: 0.0058
+  ref:
+    dist: norm
+    loc: -0.0034
+    scale: 0.0058
+  proposal: 0.005
+  latex: m_\mathrm{LSST}^1
+DES_M2:
+  prior:
+    dist: norm
+    loc: 0.0065
+    scale: 0.0066
+  ref:
+    dist: norm
+    loc: 0.0065
+    scale: 0.0066
+  proposal: 0.005
+  latex: m_\mathrm{LSST}^2
+DES_M3:
+  prior:
+    dist: norm
+    loc: 0.0159
+    scale: 0.0059
+  ref:
+    dist: norm
+    loc: 0.0159
+    scale: 0.0059
+  proposal: 0.005
+  latex: m_\mathrm{LSST}^3
+DES_M4:
+  prior:
+    dist: norm
+    loc: 0.0017
+    scale: 0.0122
+  ref:
+    dist: norm
+    loc: 0.0017
+    scale: 0.0122
+  proposal: 0.005
+  latex: m_\mathrm{LSST}^4
+# ------------------------------------------------------------------------
+# ------------------------------------------------------------------------
+# ------------------------------------------------------------------------
+# ------------------------------------------------------------------------
+# BARYON PCA
+DES_BARYON_Q1:
+  value: 0.0
+  latex: Q1_\mathrm{LSST}^1
+DES_BARYON_Q2:
+  value: 0.0
+  latex: Q2_\mathrm{LSST}^2
+DES_BARYON_Q3:
+  value: 0.0
+  latex: Q3_\mathrm{LSST}^3
+DES_BARYON_Q4:
+  value: 0.0
+  latex: Q4_\mathrm{LSST}^4

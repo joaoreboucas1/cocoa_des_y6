@@ -1,0 +1,12 @@
+data_file = dummy.modelvector
+cov_file = dummy.cov
+mask_file = ones.mask
+nz_lens_file = DESY6_lens.nz
+nz_source_file = DESY6_source.nz
+lens_ntomo = 6
+source_ntomo = 4
+n_theta = 26
+theta_min_arcmin = 2.5
+theta_max_arcmin = 250.0
+all_sims_hdf5_file = baryons_logPkR.h5
+baryon_pca_file = DESY6_BARYON_PCA.txt

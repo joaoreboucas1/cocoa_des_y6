@@ -1,1 +1,3 @@
-# cocoa_des_y6
+# Cocoa DES-Y6
+
+Implementation of DES-Y6 in Cocoa
