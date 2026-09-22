@@ -21,6 +21,7 @@ def timer(label):
   print(f"{label}: {time.perf_counter() - t0:.4f}s")
 
 import cosmolike_des_y6_interface as ci
+from .nz_modes import NzModes   # n(z) = nbar(z) + sum_j u_j U_j(z) (DES Y6 mode projection)
 
 COSMOLIKE_OMP_THREADS = int(os.environ.get("OMP_NUM_THREADS", 1))
 
@@ -57,8 +58,12 @@ class _cosmolike_prototype_base(DataSetLikelihood):
     self.ntheta           = ini.int("n_theta")
     self.theta_min_arcmin = ini.float("theta_min_arcmin")
     self.theta_max_arcmin = ini.float("theta_max_arcmin")
+    # n(z) modes (optional): the modes file is listed in the .dataset file and
+    # the number of modes to use (source_nz_nmodes) in the likelihood yaml
+    self.source_modes_file = (ini.relativeFileName('nz_source_modes_file')
+                              if ini.hasKey('nz_source_modes_file') else None)
 
-    # ------------------------------------------------------------------------   
+    # ------------------------------------------------------------------------
     tmp = int(1000 + 250*self.accuracyboost)
     self.z_interp_1D = np.concatenate((np.linspace(0.0,3.0,max(100,int(0.80*tmp)),endpoint=False),
                                        np.linspace(3.0,50.1,max(100,int(0.40*tmp)),endpoint=False),
@@ -110,8 +115,18 @@ class _cosmolike_prototype_base(DataSetLikelihood):
           ) 
         ci.init_lens_sample_size(int(self.lens_ntomo))
         ci.init_source_sample_size(int(self.source_ntomo))
-        ci.init_ntomo_powerspectra() # must be called after set_source/lens_size  
+        ci.init_ntomo_powerspectra() # must be called after set_source/lens_size
+        if int(self.source_nz_nmodes) > 0:
+          if self.source_modes_file is None:
+            raise LoggedError(self.log, "source_nz_nmodes > 0 but no "
+                              "nz_source_modes_file in the .dataset file")
+          self.source_modes = NzModes(self.source_nz, self.source_modes_file,
+                                      int(self.source_nz_nmodes))
+          self.log.info('source n(z): using %d modes from %s',
+                        self.source_modes.nmodes, self.source_modes_file)
       else:
+        if int(self.source_nz_nmodes) > 0:
+          raise LoggedError(self.log, "source_nz_nmodes > 0 requires external_nz_modeling: 1")
         ci.init_redshift_distributions_from_files(
           lens_multihisto_file = self.lens_file,
           lens_ntomo = int(self.lens_ntomo), 
@@ -367,10 +382,14 @@ class _cosmolike_prototype_base(DataSetLikelihood):
         # (1) deep copy the numpy array (so we keep track of the fiducial
         # (2) modify the copy
         # (3) call set_source_sample
-        source_nz_local = self.source_nz.copy()
-
-        # insert mod function here <-
-        #source_nz_local = f(source_nz_local, nuisance parameters)
+        if int(self.source_nz_nmodes) > 0:
+          # n_i(z) = nbar_i(z) + sum_j u_j U_ij(z), amplitudes DES_U_S1, DES_U_S2, ...
+          u = [params.get(p,0) for p in [survey+"_U_S"+str(j+1) for j in range(self.source_modes.nmodes)]]
+          source_nz_local = self.source_modes.nz(u)
+        else:
+          source_nz_local = self.source_nz.copy()
+          # insert mod function here <-
+          #source_nz_local = f(source_nz_local, nuisance parameters)
 
         ci.set_source_sample(source_nz_local)
 
