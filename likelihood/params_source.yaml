@@ -172,8 +172,34 @@ DES_M4:
   proposal: 0.005
   latex: m_\mathrm{LSST}^4
 # ------------------------------------------------------------------------
+# Source n(z) mode amplitudes: n_i(z) = nbar_i(z) + sum_j u_j U_ij(z)
+# (DES Y6, arXiv:2510.23566 eq. 30). Only used when source_nz_nmodes > 0 in
+# the likelihood yaml. DES Y6 prior: N(0,1) truncated at +-3 for each u_j, and
+# DES_DZ_S* fixed to 0 (the modes replace the shifts). Fixed to 0 here; a run
+# yaml with modes should override them, e.g.
+#   DES_U_S1: {prior: {dist: truncnorm, a: -3, b: 3, loc: 0, scale: 1}, ref: {dist: norm, loc: 0, scale: 0.5}, proposal: 0.5}
 # ------------------------------------------------------------------------
-# ------------------------------------------------------------------------
+DES_U_S1:
+  value: 0.0
+  latex: u_1^\mathrm{s}
+DES_U_S2:
+  value: 0.0
+  latex: u_2^\mathrm{s}
+DES_U_S3:
+  value: 0.0
+  latex: u_3^\mathrm{s}
+DES_U_S4:
+  value: 0.0
+  latex: u_4^\mathrm{s}
+DES_U_S5:
+  value: 0.0
+  latex: u_5^\mathrm{s}
+DES_U_S6:
+  value: 0.0
+  latex: u_6^\mathrm{s}
+DES_U_S7:
+  value: 0.0
+  latex: u_7^\mathrm{s}
 # ------------------------------------------------------------------------
 # BARYON PCA
 DES_BARYON_Q1:

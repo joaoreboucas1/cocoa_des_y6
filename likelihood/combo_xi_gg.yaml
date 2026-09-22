@@ -9,6 +9,10 @@ kmax_boltzmann: 5.0
 speed: 1
 non_linear_emul: 2
 external_nz_modeling: 0
+# Number of source n(z) modes to use: n_i(z) = nbar_i(z) + sum_j u_j U_ij(z).
+# Requires external_nz_modeling: 1 and `nz_source_modes_file` in the .dataset file.
+# 0 = no modes (the n(z) of nz_source_file, with the shift parameters DES_DZ_S*).
+source_nz_nmodes: 0
 use_emulator: 0
 debug: false
 # IA REDSHIFT EVOLUTION: 0 = NO_IA (AMPLITUDES SET TO ZERO), 

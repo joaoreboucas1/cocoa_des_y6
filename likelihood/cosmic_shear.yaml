@@ -2,7 +2,6 @@ path: null
 data_file: DESY6.dataset
 data_vector_file: null
 mask_file: null
-data_vector_file: null
 accuracyboost: 1.0
 integration_accuracy: 0
 lmax: 50000 # lmax computed for real space correlation function
@@ -20,6 +19,10 @@ IA_model: 0
 # IA_code: 0 = C FASTPT, 1 = Python PAST-PT
 IA_code: 1
 external_nz_modeling: 0
+# Number of source n(z) modes to use: n_i(z) = nbar_i(z) + sum_j u_j U_ij(z).
+# Requires external_nz_modeling: 1 and `nz_source_modes_file` in the .dataset file.
+# 0 = no modes (the n(z) of nz_source_file, with the shift parameters DES_DZ_S*).
+source_nz_nmodes: 0
 use_emulator: 0
 
 add_baryons_on_dv: False
