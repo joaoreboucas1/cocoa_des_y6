@@ -1,0 +1,16 @@
+# Test configuration for the n(z) mode pipeline (no DES data products needed):
+# fiducial theory as the data vector, Gaussian covariance from nz_pca/make_gaussian_cov.py,
+# dummy n(z) modes built from nz_pca/make_dummy_realizations.py.
+data_file = fiducial_xi.modelvector
+cov_file = gaussian_xi.cov
+mask_file = ones.mask
+nz_lens_file = DESY6_lens.nz
+nz_source_file = DESY6_source.nz
+nz_source_modes_file = dummy_source_modes.txt
+lens_ntomo = 6
+source_ntomo = 4
+n_theta = 20
+theta_min_arcmin = 2.5
+theta_max_arcmin = 250.0
+baryon_pca_file = BARYON_PCA_ANTILLES_Y1.txt
+all_sims_hdf5_file = baryons_logPkR.h5

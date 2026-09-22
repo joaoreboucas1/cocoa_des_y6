@@ -1,0 +1,251 @@
+# Cosmic-shear MCMC with the n(z) mode projection (DES Y6 style):
+#   n_i(z) = nbar_i(z) + sum_{j=1}^{6} u_j U_ij(z),  u_j ~ N(0,1) truncated at +-3,  no Delta z.
+# The modes file and the number of modes: `nz_source_modes_file` in the .dataset
+# file and `source_nz_nmodes` below (must not exceed the modes in the file).
+# NOTE: this uses the DUMMY modes/covariance of DESY6_nzpca_test.dataset; point
+# data_file to the real DES Y6 dataset once the products exist, and set
+# source_nz_nmodes to the number recommended by nz_pca/compute_modes.py (DES: 7).
+timing: true
+debug: false
+stop_at_error: false
+likelihood:
+  des_y6.cosmic_shear:
+    path: ./external_modules/data/des_y6
+    data_file: DESY6_nzpca_test.dataset
+    accuracyboost: 1.0
+    integration_accuracy: 0
+    lmax: 50000
+    kmax_boltzmann: 5.0
+    non_linear_emul: 2
+    IA_model: 0
+    IA_code: 0
+    IA_redshift_evolution: 3
+    debug: false
+    external_nz_modeling: 1
+    source_nz_nmodes: 6
+params:
+  As_1e9:
+    prior:
+      min: 0.5
+      max: 5
+    ref:
+      dist: norm
+      loc: 2.1
+      scale: 0.2
+    proposal: 0.2
+    latex: 10^9 A_\mathrm{s}
+    drop: true
+    renames: A
+  ns:
+    prior:
+      min: 0.87
+      max: 1.07
+    ref:
+      dist: norm
+      loc: 0.96605
+      scale: 0.015
+    proposal: 0.015
+    latex: n_\mathrm{s}
+  H0:
+    prior:
+      min: 55
+      max: 91
+    ref:
+      dist: norm
+      loc: 67.32
+      scale: 3
+    proposal: 3
+    latex: H_0
+  omegab:
+    prior:
+      min: 0.03
+      max: 0.07
+    ref:
+      dist: norm
+      loc: 0.0495
+      scale: 0.004
+    proposal: 0.004
+    latex: \Omega_\mathrm{b}
+    drop: true
+  omegam:
+    prior:
+      min: 0.1
+      max: 0.9
+    ref:
+      dist: norm
+      loc: 0.316
+      scale: 0.015
+    proposal: 0.015
+    latex: \Omega_\mathrm{m}
+    drop: true
+  w:
+    prior:
+      min: -3
+      max: -0.01
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}
+  w0pwa:
+    prior:
+      min: -5
+      max: -0.01
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}+w_{a,\mathrm{DE}}
+    drop: true
+  wa:
+    value: 'lambda w0pwa, w: w0pwa - w'
+    latex: w_{a,\mathrm{DE}}
+  mnu:
+    prior:
+      min: 0.06
+      max: 0.6
+    ref:
+      dist: norm
+      loc: 0.25
+      scale: 0.1
+    proposal: 0.05
+  tau:
+    value: 0.0697186
+    latex: \tau_\mathrm{reio}
+  As:
+    value: 'lambda As_1e9: 1e-9 * As_1e9'
+    latex: A_\mathrm{s}
+  omegabh2:
+    value: 'lambda omegab, H0: omegab*(H0/100)**2'
+    latex: \Omega_\mathrm{b} h^2
+  omegach2:
+    value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
+    latex: \Omega_\mathrm{c} h^2
+  omegal:
+    latex: \Omega_\Lambda
+  omegamh2:
+    derived: 'lambda omegam, H0: omegam*(H0/100)**2'
+    latex: \Omega_\mathrm{m} h^2
+  sigma8:
+    latex: \sigma_8
+  DES_U_S1:
+    prior:
+      dist: truncnorm   # N(0,1) truncated at +-3 (a, b in units of scale)
+      a: -3.0
+      b: 3.0
+      loc: 0.0
+      scale: 1.0
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.5
+    proposal: 0.5
+    latex: u_1^\mathrm{s}
+  DES_U_S2:
+    prior:
+      dist: truncnorm   # N(0,1) truncated at +-3 (a, b in units of scale)
+      a: -3.0
+      b: 3.0
+      loc: 0.0
+      scale: 1.0
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.5
+    proposal: 0.5
+    latex: u_2^\mathrm{s}
+  DES_U_S3:
+    prior:
+      dist: truncnorm   # N(0,1) truncated at +-3 (a, b in units of scale)
+      a: -3.0
+      b: 3.0
+      loc: 0.0
+      scale: 1.0
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.5
+    proposal: 0.5
+    latex: u_3^\mathrm{s}
+  DES_U_S4:
+    prior:
+      dist: truncnorm   # N(0,1) truncated at +-3 (a, b in units of scale)
+      a: -3.0
+      b: 3.0
+      loc: 0.0
+      scale: 1.0
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.5
+    proposal: 0.5
+    latex: u_4^\mathrm{s}
+  DES_U_S5:
+    prior:
+      dist: truncnorm   # N(0,1) truncated at +-3 (a, b in units of scale)
+      a: -3.0
+      b: 3.0
+      loc: 0.0
+      scale: 1.0
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.5
+    proposal: 0.5
+    latex: u_5^\mathrm{s}
+  DES_U_S6:
+    prior:
+      dist: truncnorm   # N(0,1) truncated at +-3 (a, b in units of scale)
+      a: -3.0
+      b: 3.0
+      loc: 0.0
+      scale: 1.0
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.5
+    proposal: 0.5
+    latex: u_6^\mathrm{s}
+  DES_DZ_S1:
+    value: 0.0
+    latex: \Delta z_\mathrm{s}^1
+  DES_DZ_S2:
+    value: 0.0
+    latex: \Delta z_\mathrm{s}^2
+  DES_DZ_S3:
+    value: 0.0
+    latex: \Delta z_\mathrm{s}^3
+  DES_DZ_S4:
+    value: 0.0
+    latex: \Delta z_\mathrm{s}^4
+theory:
+  camb:
+    path: ./external_modules/code/CAMB
+    stop_at_error: false
+    use_renames: true
+    extra_args:
+      halofit_version: mead2020_feedback
+      HMCode_logT_AGN: 7.7
+      AccuracyBoost: 1.05
+      dark_energy_model: ppf
+      accurate_massive_neutrino_transfers: false
+      k_per_logint: 10
+      kmax: 5.0
+      nnu: 3.044
+      num_massive_neutrinos: 3
+output: ./projects/des_y6/chains/EXAMPLE_NZ_MODES_MCMC
+sampler:
+  mcmc:
+    covmat: null
+    covmat_params: null
+    drag: false
+    oversample_power: 0.25
+    oversample_thin: true
+    proposal_scale: 1.9
+    Rminus1_stop: 0.02
+    Rminus1_cl_stop: 0.2
+    max_tries: 1000
+    burn_in: 0
+    learn_proposal: true

@@ -1,0 +1,168 @@
+# Fiducial point for the n(z) mode construction (nz_pca/compute_jacobian.py).
+# Any cocoa yaml works as long as `sampler: evaluate: override:` fixes ALL sampled
+# parameters: cosmology, IA, shear calibration and photo-z shifts are frozen at
+# these values while d(data vector)/d n(z) is computed.  Cosmic shear only
+# (DES Y6 used xi+- and gamma_t for the source modes; switch to combo_xi_ggl
+# and add the lens parameters to do the same).
+timing: true
+debug: false
+stop_at_error: false
+likelihood:
+  des_y6.cosmic_shear:
+    path: ./external_modules/data/des_y6
+    data_file: DESY6_nzpca_test.dataset
+    accuracyboost: 1.0
+    integration_accuracy: 0
+    lmax: 50000
+    kmax_boltzmann: 5.0
+    non_linear_emul: 2
+    IA_model: 0
+    IA_code: 0
+    IA_redshift_evolution: 3
+    debug: false
+    external_nz_modeling: 1
+    source_nz_nmodes: 0
+params:
+  As_1e9:
+    prior:
+      min: 0.5
+      max: 5
+    ref:
+      dist: norm
+      loc: 2.1
+      scale: 0.2
+    proposal: 0.2
+    latex: 10^9 A_\mathrm{s}
+    drop: true
+    renames: A
+  ns:
+    prior:
+      min: 0.87
+      max: 1.07
+    ref:
+      dist: norm
+      loc: 0.96605
+      scale: 0.015
+    proposal: 0.015
+    latex: n_\mathrm{s}
+  H0:
+    prior:
+      min: 55
+      max: 91
+    ref:
+      dist: norm
+      loc: 67.32
+      scale: 3
+    proposal: 3
+    latex: H_0
+  omegab:
+    prior:
+      min: 0.03
+      max: 0.07
+    ref:
+      dist: norm
+      loc: 0.0495
+      scale: 0.004
+    proposal: 0.004
+    latex: \Omega_\mathrm{b}
+    drop: true
+  omegam:
+    prior:
+      min: 0.1
+      max: 0.9
+    ref:
+      dist: norm
+      loc: 0.316
+      scale: 0.015
+    proposal: 0.015
+    latex: \Omega_\mathrm{m}
+    drop: true
+  w:
+    prior:
+      min: -3
+      max: -0.01
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}
+  w0pwa:
+    prior:
+      min: -5
+      max: -0.01
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}+w_{a,\mathrm{DE}}
+    drop: true
+  wa:
+    value: 'lambda w0pwa, w: w0pwa - w'
+    latex: w_{a,\mathrm{DE}}
+  mnu:
+    prior:
+      min: 0.06
+      max: 0.6
+    ref:
+      dist: norm
+      loc: 0.25
+      scale: 0.1
+    proposal: 0.05
+  tau:
+    value: 0.0697186
+    latex: \tau_\mathrm{reio}
+  As:
+    value: 'lambda As_1e9: 1e-9 * As_1e9'
+    latex: A_\mathrm{s}
+  omegabh2:
+    value: 'lambda omegab, H0: omegab*(H0/100)**2'
+    latex: \Omega_\mathrm{b} h^2
+  omegach2:
+    value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
+    latex: \Omega_\mathrm{c} h^2
+  omegal:
+    latex: \Omega_\Lambda
+  omegamh2:
+    derived: 'lambda omegam, H0: omegam*(H0/100)**2'
+    latex: \Omega_\mathrm{m} h^2
+  sigma8:
+    latex: \sigma_8
+theory:
+  camb:
+    path: ./external_modules/code/CAMB
+    stop_at_error: false
+    use_renames: true
+    extra_args:
+      halofit_version: mead2020_feedback
+      HMCode_logT_AGN: 7.7
+      AccuracyBoost: 1.05
+      dark_energy_model: ppf
+      accurate_massive_neutrino_transfers: false
+      k_per_logint: 10
+      kmax: 5.0
+      nnu: 3.044
+      num_massive_neutrinos: 3
+sampler:
+  evaluate:
+    override:
+      H0: 67.0
+      omegam: 0.319
+      omegab: 0.049
+      As_1e9: 2.1
+      ns: 0.96
+      mnu: 0.06
+      w: -1
+      w0pwa: -1
+      DES_DZ_S1: 0
+      DES_DZ_S2: 0
+      DES_DZ_S3: 0
+      DES_DZ_S4: 0
+      DES_M1: -0.00339767
+      DES_M2: 0.0064552
+      DES_M3: 0.01593935
+      DES_M4: 0.00169811
+      DES_A1_1: 0.7
+      DES_A1_2: -1.7
+output: ./projects/des_y6/chains/EXAMPLE_NZ_MODES_FISHER
